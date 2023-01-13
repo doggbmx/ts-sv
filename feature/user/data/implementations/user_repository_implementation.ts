@@ -1,52 +1,52 @@
+import { Type } from 'typescript';
 import { UpdateUser } from '../../domain/models/update_user_model';
 import { User, id, USERTYPE } from '../../domain/models/user_model';
 import { UserRepositories } from '../../domain/repositories/user_repositories';
 
 class UserRepositoriesImplementation implements UserRepositories {
-    
+
     async getUser(id: id): Promise<User> {
-        try {
+        return this._call(() => {
             setTimeout(() => {
                 console.log('getting..');
             }, 1000);
             let newUser = {
-                userId: 1,
+                userId: id,
                 name: 'Cosme Fulanito',
                 email: 'quemacoco@gmail.com',
                 password: 'foofoo',
                 userType: USERTYPE.BMX
             };
             return newUser as User;
-        } catch (error) {
-            console.log(error);
-            throw(error);
-        }
+        }, "Could not get the user")
     }
 
-    async createUser(user: User): Promise<Boolean> {
-        try {
+    async createUser (user: User): Promise<Boolean> {
+        return this._call(() => {
             setTimeout(() => {
                 console.log('posting..');
             }, 1000);
             // mocking send to db.
             return true;
-        } catch (error) {
-            console.log(error);
-            throw(error);
-        }
+        }, "Couldn't create the new user");        
     }
 
     async updateUser(user: User, data?: UpdateUser): Promise<User> {
-        try {
+        return this._call(() => {
             setTimeout(() => {
                 console.log('updating..');
             }, 1000);
             let updatedUser = { user, ...data};
             return updatedUser as User;
+        }, "Couldn't update the user");
+    }
+    
+    _call<Type>(callback, errMessage: string): Promise<Type> {
+        try {
+            return callback();
         } catch (error) {
-            console.log(error);
+            console.log(errMessage);
             throw(error);
         }
     }
-    
 }
