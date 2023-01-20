@@ -1,0 +1,1 @@
+export const SELECT_USERS_QUERY = `SELECT * FROM user AS b GROUP BT b.id`
