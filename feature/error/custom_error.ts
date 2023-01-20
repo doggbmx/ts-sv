@@ -1,3 +1,4 @@
-export class CustomError extends ErrorEvent {
-    message: string
+export abstract class CustomError extends Error {
+    abstract statusCode: number;
+    abstract formatError(): { message: string, field?: string }[];
 }
