@@ -14,3 +14,7 @@ export interface User {
     password: password,
     userType: USERTYPE,
 }
+
+export interface CreateUser extends Omit<User, 'userId'> {}
+
+export interface UpdateUser extends Partial<User> {}
