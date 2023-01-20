@@ -1,7 +1,7 @@
 import { Type } from 'typescript';
-import { UpdateUser } from '../../domain/models/update_user_model';
-import { User, id, USERTYPE } from '../../domain/models/user_model';
-import { UserRepositories } from '../../domain/repositories/user_repositories';
+import { UpdateUser } from '../models/update_user_model';
+import { User, id, USERTYPE } from '../models/user_model';
+import { UserRepositories } from './user_repositories';
 // import { CustomErrorHandler } from '../../../error/error_handler'
 
 class UserRepositoriesImplementation implements UserRepositories {
