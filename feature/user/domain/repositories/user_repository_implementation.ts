@@ -1,29 +1,36 @@
 import { Type } from 'typescript';
-import { UpdateUser } from '../models/update_user_model';
-import { User, id, USERTYPE } from '../models/user_model';
+import { CustomError } from '../../../error/custom_error';
+import { GenericError } from '../../../error/generic_error';
+import { User, id, USERTYPE, UpdateUser } from '../models/user_model';
 import { UserRepositories } from './user_repositories';
+import { UserDataSource } from '../../data/interfaces/user_data_source';
 // import { CustomErrorHandler } from '../../../error/error_handler'
 
-class UserRepositoriesImplementation implements UserRepositories {
+export class UserRepositoriesImplementation implements UserRepositories {
+    private usersDataSource: UserDataSource;
+    private constructor(dataSource: UserDataSource) {
+        this.usersDataSource = dataSource;
+    }
 
-    async getUser(id: id): Promise<User> {
-        return this._call(() => {
-            setTimeout(() => {
-                console.log('getting..');
-            }, 1000);
-            let newUser = {
-                userId: id,
-                name: 'Cosme Fulanito',
-                email: 'quemacoco@gmail.com',
-                password: 'foofoo',
-                userType: USERTYPE.BMX
-            };
-            return newUser as User;
-        }, "Could not get the user")
+    static instance: UserRepositories | null = null;
+
+    static create(dataSource: UserDataSource) {
+        if (UserRepositoriesImplementation.instance == null) {
+            UserRepositoriesImplementation.instance = new UserRepositoriesImplementation(dataSource);
+        }
+    }
+
+    async getUser(id?: id): Promise<User[]> {
+        return await this._callDataSource(async () => {
+            if (id) {
+                return 'not developed yet!'
+            } 
+            return await this.usersDataSource.getAllUsers();
+        }, "Could not get the user");
     }
 
     async createUser (user: User): Promise<Boolean> {
-        return this._call(() => {
+        return this._callDataSource(() => {
             setTimeout(() => {
                 console.log('posting..');
             }, 1000);
@@ -33,7 +40,7 @@ class UserRepositoriesImplementation implements UserRepositories {
     }
 
     async updateUser(user: User, data?: UpdateUser): Promise<User> {
-        return this._call(() => {
+        return this._callDataSource(() => {
             setTimeout(() => {
                 console.log('updating..');
             }, 1000);
@@ -42,13 +49,14 @@ class UserRepositoriesImplementation implements UserRepositories {
         }, "Couldn't update the user");
     }
     
-    _call<Type>(callback, errMessage: string): Promise<Type> {
+    private async _callDataSource<Type>(callback: Function, errMessage: string): Promise<Type> {
         try {
-            return callback();
+            return await callback();
         } catch (error) {
-            console.log(errMessage);
-            // throw CustomErrorHandler.fromGenericError(error);
-            throw new Error;
+            if (error instanceof CustomError) {
+                throw error;
+            }
+            throw new GenericError('Users Repositories error.');
         }
     }
 }
