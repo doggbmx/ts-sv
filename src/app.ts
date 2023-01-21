@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { router } from '../feature/user/presentation/items'
+import { router } from '../feature/user/presentation'
 
 const app = express();
 const PORT = process.env.PORT || 8080;
