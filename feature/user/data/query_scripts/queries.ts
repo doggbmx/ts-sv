@@ -1,1 +1,1 @@
-export const SELECT_USERS_QUERY = `SELECT * FROM user AS b GROUP BY b.id`
+export const SELECT_USERS_QUERY = `SELECT * FROM public.user`
