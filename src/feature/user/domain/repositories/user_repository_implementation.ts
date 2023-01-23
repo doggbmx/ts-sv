@@ -27,7 +27,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
                 return 'not developed yet!'
             } 
             return await this.usersDataSource.getAllUsers();
-        }, "Could not get the user");
+        });
     }
 
     async createUser (user: User): Promise<Boolean> {
@@ -37,7 +37,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
             }, 1000);
             // mocking send to db.
             return true;
-        }, "Couldn't create the new user");        
+        });        
     }
 
     async updateUser(user: User, data?: UpdateUser): Promise<User> {
@@ -47,10 +47,10 @@ export class UserRepositoriesImplementation implements UserRepositories {
             }, 1000);
             let updatedUser = { user, ...data};
             return updatedUser as User;
-        }, "Couldn't update the user");
+        });
     }
     
-    private async callDataSource<Type>(callback: Function, errMessage: string): Promise<Type> {
+    private async callDataSource<T>(callback: Function): Promise<T> {
         try {
             return await callback();
         } catch (error) {
