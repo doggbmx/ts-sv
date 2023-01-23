@@ -18,6 +18,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
         if (UserRepositoriesImplementation.instance == null) {
             UserRepositoriesImplementation.instance = new UserRepositoriesImplementation(dataSource);
         }
+        return UserRepositoriesImplementation.instance;
     }
 
     async getUser(id?: id): Promise<User[]> {
