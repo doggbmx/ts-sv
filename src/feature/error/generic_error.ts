@@ -8,7 +8,7 @@ export class GenericError extends CustomError {
       Object.setPrototypeOf(this, GenericError.prototype);
     }
 
-    formatError(): { message: string; field?: string | undefined; }[] {
+    formatError(): { message: string; field?: string }[] {
         return [{ message: this.errorMessage }];
     }
 }
