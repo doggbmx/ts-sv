@@ -9,7 +9,8 @@ export default function usersRouter(usersRepository: UserRepositories) {
     router.get('/', async (req: Request, res: Response) => {
         try {
             const { userName } = req.query as UserRequestQuery;
-            const users = await usersRepository.getUser();
+            const users = await usersRepository.getUser(userName);
+            res.send(users);
         } catch (error) {
             throw error;
         }
