@@ -12,7 +12,7 @@ export default function usersRouter(usersRepository: UserRepositories) {
             const { userName } = req.query as UserRequestQuery;
             const users = await usersRepository.getUser(userName);
             console.log(users);
-           return res.send(users);
+            res.send(users);
         } catch (error) {
             next(error);
         }

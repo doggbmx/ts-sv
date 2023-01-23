@@ -54,6 +54,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
         try {
             return await callback();
         } catch (error) {
+            console.log(error);
             if (error instanceof CustomError) {
                 throw error;
             }

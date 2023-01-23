@@ -31,7 +31,7 @@ export class PGUsersDataSource implements UserDataSource {
         client = await this.db.connect();
         try {
             const response = await client.query(query, values);
-            return await callback(response);
+            return callback(response);
         } catch(err) {
             if (err instanceof CustomError) {
                 throw err;
