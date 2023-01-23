@@ -10,7 +10,7 @@ const pool = new Client({
 
 pool.connect();
 
-pool.query(`select * from usuarios`, (err, res) => {
+pool.query(`SELECT * FROM public.user`, (err, res) => {
     if(!err) {
         console.log(res.rows);
     } else {
