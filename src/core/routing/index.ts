@@ -1,5 +1,6 @@
 import express, { Application } from 'express';
-import usersRouter from '../../../feature/user/presentation/user_router';
+import { usersRouter } from '../../feature/user/presentation';
+
 
 export const configureRouting = (app: Application) => {
     const router = express.Router();

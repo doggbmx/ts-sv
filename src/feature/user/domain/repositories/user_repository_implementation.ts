@@ -1,7 +1,7 @@
 import { Type } from 'typescript';
 import { CustomError } from '../../../error/custom_error';
 import { GenericError } from '../../../error/generic_error';
-import { User, id, USERTYPE, UpdateUser } from '../models/user_model';
+import { User, id, UpdateUser } from '../models/user_model';
 import { UserRepositories } from './user_repositories';
 import { UserDataSource } from '../../data/interfaces/user_data_source';
 // import { CustomErrorHandler } from '../../../error/error_handler'
@@ -22,7 +22,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
     }
 
     async getUser(id?: id): Promise<User[]> {
-        return await this._callDataSource(async () => {
+        return await this.callDataSource(async () => {
             if (id) {
                 return 'not developed yet!'
             } 
@@ -31,7 +31,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
     }
 
     async createUser (user: User): Promise<Boolean> {
-        return this._callDataSource(() => {
+        return this.callDataSource(() => {
             setTimeout(() => {
                 console.log('posting..');
             }, 1000);
@@ -41,7 +41,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
     }
 
     async updateUser(user: User, data?: UpdateUser): Promise<User> {
-        return this._callDataSource(() => {
+        return this.callDataSource(() => {
             setTimeout(() => {
                 console.log('updating..');
             }, 1000);
@@ -50,7 +50,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
         }, "Couldn't update the user");
     }
     
-    private async _callDataSource<Type>(callback: Function, errMessage: string): Promise<Type> {
+    private async callDataSource<Type>(callback: Function, errMessage: string): Promise<Type> {
         try {
             return await callback();
         } catch (error) {

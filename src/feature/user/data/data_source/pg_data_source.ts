@@ -36,7 +36,7 @@ export class PGUsersDataSource implements UserDataSource {
             if (err instanceof CustomError) {
                 throw err;
             }
-            throw new DataBaseError(`${err}`);
+            throw new DataBaseError(err as Error);
         } finally {
             if (client){
                 client.release()
