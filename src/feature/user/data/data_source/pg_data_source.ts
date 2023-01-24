@@ -3,7 +3,7 @@ import { CustomError } from '../../../error/custom_error';
 import { DataBaseError } from '../../../error/database_error';
 import { User } from '../../../user/domain/models/user_model';
 import { UserDataSource } from '../interfaces/user_data_source';
-import { SELECT_USERS_QUERY } from '../query_scripts/queries';
+import { SELECT_USERS_QUERY, SELECT_USER_QUERY } from '../query_scripts/queries';
 import { userFromPG } from '../utils/user_serializer';
 
 export class PGUsersDataSource implements UserDataSource {
@@ -23,6 +23,15 @@ export class PGUsersDataSource implements UserDataSource {
 
     async getAllUsers(): Promise<User[]> {
         return await this.callDataBase(SELECT_USERS_QUERY, [], (result) => result.rows.map(userFromPG)); 
+    }
+
+    async getUser(id: string): Promise<User> {
+        return await this.callDataBase(SELECT_USER_QUERY, [id], (result) => {
+            if (result.rowCount === 0) {
+                throw new Error;
+            }
+            return userFromPG(result.rows[0]);
+        });
     }
 
 
