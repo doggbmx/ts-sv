@@ -1,9 +1,8 @@
-export type id = string | number;
 export type password = string;
 
 
 export interface User {
-    userId: id
+    userId: string
     name: string,
     email: string,
     password: password,
