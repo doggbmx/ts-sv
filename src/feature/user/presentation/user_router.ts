@@ -18,5 +18,15 @@ export default function usersRouter(usersRepository: UserRepositories) {
         }
     });
 
+    router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params;
+            const user = await usersRepository.getUser(id);
+            res.send(user);
+        } catch (err) {
+            next(err);
+        }
+    })
+
     return router;
 }
