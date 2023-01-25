@@ -8,7 +8,7 @@ export class DataBaseError extends CustomError {
       Object.setPrototypeOf(this, DataBaseError.prototype);
     }
 
-    formatError(): { message: string; field?: string | undefined; }[] {
+    formatError(): { message: string; field?: string }[] {
         return [{message: 'Database error.'}];
     }
 
