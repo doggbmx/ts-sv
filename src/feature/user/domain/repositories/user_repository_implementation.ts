@@ -1,7 +1,7 @@
 import { Type } from 'typescript';
 import { CustomError } from '../../../error/custom_error';
 import { GenericError } from '../../../error/generic_error';
-import { User, UpdateUser } from '../models/user_model';
+import { User, UpdateUser, CreateUser } from '../models/user_model';
 import { UserRepositories } from './user_repositories';
 import { UserDataSource } from '../../data/interfaces/user_data_source';
 // import { CustomErrorHandler } from '../../../error/error_handler'
@@ -30,14 +30,8 @@ export class UserRepositoriesImplementation implements UserRepositories {
         });
     }
 
-    async createUser (user: User): Promise<Boolean> {
-        return this.callDataSource(() => {
-            setTimeout(() => {
-                console.log('posting..');
-            }, 1000);
-            // mocking send to db.
-            return true;
-        });        
+    async createUser (data: CreateUser): Promise<User> {
+        return await this.callDataSource(() => this.usersDataSource.createUser(data));
     }
 
     async updateUser(user: User, data?: UpdateUser): Promise<User> {
