@@ -1,5 +1,7 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { UserRepositories } from '../domain/repositories/user_repositories';
+import { createUserValidator, getUserValidator } from './users_middleware';
+import { validatorHandler } from '../../../core/middlewares/validation_handler';
 
 type UserRequestQuery = { userName?: string };
 
@@ -18,7 +20,7 @@ export default function usersRouter(usersRepository: UserRepositories) {
         }
     });
 
-    router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    router.get('/:id', ...getUserValidator, validatorHandler, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
             const user = await usersRepository.getUser(id);
@@ -28,7 +30,7 @@ export default function usersRouter(usersRepository: UserRepositories) {
         }
     });
 
-    router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+    router.post('/', ...createUserValidator, validatorHandler, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const newUser = await usersRepository.createUser(req.body);
             res.status(201).send(newUser);
