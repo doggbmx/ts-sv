@@ -26,7 +26,16 @@ export default function usersRouter(usersRepository: UserRepositories) {
         } catch (err) {
             next(err);
         }
-    })
+    });
+
+    router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const newUser = await usersRepository.createUser(req.body);
+            res.status(201).send(newUser);
+        } catch (err) {
+            next(err);
+        }
+    });
 
     return router;
 }
