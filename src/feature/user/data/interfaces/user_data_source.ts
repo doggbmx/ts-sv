@@ -1,6 +1,7 @@
-import { User } from '../../domain/models/user_model';
+import { CreateUser, User } from '../../domain/models/user_model';
 
 export interface UserDataSource {
     getAllUsers(): Promise<User[]>;
     getUser(userId: string): Promise<User>;
+    createUser(data: CreateUser): Promise<User>;
 }
