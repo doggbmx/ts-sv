@@ -34,13 +34,14 @@ export class UserRepositoriesImplementation implements UserRepositories {
         return await this.callDataSource(() => this.usersDataSource.createUser(data));
     }
 
-    async updateUser(user: User, data?: UpdateUser): Promise<User> {
-        return this.callDataSource(() => {
-            setTimeout(() => {
-                console.log('updating..');
-            }, 1000);
-            let updatedUser = { user, ...data};
-            return updatedUser as User;
+    async updateUser(userId: string, data: UpdateUser): Promise<User> {
+        return await this.callDataSource(async () => {
+            const selectedUser = await this.usersDataSource.getUser(userId);
+            const updatedUser = {
+                ...selectedUser,
+                ...data,
+            };
+            return await this.usersDataSource.updateUser(updatedUser);
         });
     }
     
