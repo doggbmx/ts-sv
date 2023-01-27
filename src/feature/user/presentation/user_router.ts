@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { UserRepositories } from '../domain/repositories/user_repositories';
-import { createUserValidator, getUserValidator } from './users_middleware';
+import { createUserValidator, getUserValidator, updateUserValidator } from './users_middleware';
 import { validatorHandler } from '../../../core/middlewares/validation_handler';
 
 type UserRequestQuery = { userName?: string };
@@ -34,6 +34,16 @@ export default function usersRouter(usersRepository: UserRepositories) {
         try {
             const newUser = await usersRepository.createUser(req.body);
             res.status(201).send(newUser);
+        } catch (err) {
+            next(err);
+        }
+    });
+
+    router.patch('/:id', ...updateUserValidator, validatorHandler, async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params;
+            const user = await usersRepository.updateUser(id, req.body);
+            res.send(user);
         } catch (err) {
             next(err);
         }
