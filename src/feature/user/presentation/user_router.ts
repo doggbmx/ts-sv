@@ -10,7 +10,6 @@ export default function usersRouter(usersRepository: UserRepositories) {
 
     router.get('/', async (req: Request, res: Response, next: NextFunction) => {
         try {
-            console.log('routerrrr');
             const { userName } = req.query as UserRequestQuery;
             const users = await usersRepository.getUser(userName);
             console.log(users);
@@ -46,6 +45,16 @@ export default function usersRouter(usersRepository: UserRepositories) {
             res.send(user);
         } catch (err) {
             next(err);
+        }
+    });
+
+    router.get('/:id/tech', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { id } = req.params;
+            const user = await usersRepository.getUserWithTech(id);
+            res.send(user);
+        } catch (error) {
+            next(error);
         }
     });
 
