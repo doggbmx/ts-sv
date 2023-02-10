@@ -3,7 +3,7 @@ import { CustomError } from '../../../error/custom_error';
 import { DataBaseError } from '../../../error/database_error';
 import { CreateUser, User } from '../../../user/domain/models/user_model';
 import { UserDataSource } from '../interfaces/user_data_source';
-import { INSERT_USER_QUERY, SELECT_USERS_QUERY, SELECT_USER_QUERY, UPDATE_USER_QUERY } from '../query_scripts/queries';
+import { INSERT_USER_QUERY, SELECT_USERS_QUERY, SELECT_USER_QUERY, SELECT_USER_WITH_TECH, UPDATE_USER_QUERY } from '../query_scripts/queries';
 import { userFromPG } from '../utils/user_serializer';
 
 export class PGUsersDataSource implements UserDataSource {
@@ -35,11 +35,24 @@ export class PGUsersDataSource implements UserDataSource {
     }
 
     async createUser(data: CreateUser): Promise<User> {
-        return await this.callDataBase(INSERT_USER_QUERY, [data.name, data.email, data.password, data.userType], (result) => userFromPG(result.rows[0]));
+        return await this.callDataBase(INSERT_USER_QUERY, [data.name, data.email, data.password, data.techs], (result) => userFromPG(result.rows[0]));
     }
 
     async updateUser(data: User): Promise<User> {
-        return await this.callDataBase(UPDATE_USER_QUERY, [data.userId, data.name, data.email, data.password, data.userType], (result) => userFromPG(result.rows[0]));
+        return await this.callDataBase(UPDATE_USER_QUERY, [data.userId, data.name, data.email, data.password, data.techs], (result) => userFromPG(result.rows[0]));
+    }
+
+    async getUserWithTech(userId: string): Promise<User> {
+        return await this.callDataBase(SELECT_USER_WITH_TECH, [userId], (result) => {
+            const formattedResult = {
+                technologies: result.rows.reduce((acc, curr) => [...acc, curr.tech_name], [])
+            }
+
+            console.log(formattedResult);
+            
+            return userFromPG(formattedResult);
+            // return result.rows.map((doc) => userFromPG(doc))
+        });
     }
 
 
