@@ -5,4 +5,5 @@ export interface UserRepositories {
     getUser(id?: string): Promise<User[]>;
     createUser(data: CreateUser): Promise<User>;
     updateUser(userId: string, data:UpdateUser): Promise<User>;
+    getUserWithTech(id: string): Promise<User>;
 };
