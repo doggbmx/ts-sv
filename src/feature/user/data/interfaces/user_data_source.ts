@@ -5,4 +5,5 @@ export interface UserDataSource {
     getUser(userId: string): Promise<User>;
     createUser(data: CreateUser): Promise<User>;
     updateUser(data: User): Promise<User>;
+    getUserWithTech(userId: string): Promise<User>;
 }
