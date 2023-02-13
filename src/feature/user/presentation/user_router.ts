@@ -58,5 +58,15 @@ export default function usersRouter(usersRepository: UserRepositories) {
         }
     });
 
+    router.post('/:userId/tech/:techId'), async (req: Request, res:Response, next:NextFunction) => {
+        try {
+            const { userId, techId } = req.params;
+            const newUserTech = await usersRepository.createUserTech(userId, techId);
+            res.status(200).send(newUserTech);
+        } catch (err) {
+            next(err)
+        }
+    }
+
     return router;
 }
