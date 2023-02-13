@@ -24,7 +24,6 @@ export const createUserValidator = [
     validateBodyParam("name").isLength({ min:3 }).withMessage("Invalid name"),
     validateBodyParam("email").isEmail().isLength({ min:3 }).withMessage("Invalid Email"),
     validateBodyParam("password").isLength({ min:8 }).withMessage("Password too short!"),
-    validateBodyParam("userType").isLength({ min:3 }).withMessage("Invalid sport!")
 ];
 
 export const updateUserValidator = [
