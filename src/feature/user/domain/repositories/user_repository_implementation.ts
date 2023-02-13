@@ -48,7 +48,13 @@ export class UserRepositoriesImplementation implements UserRepositories {
     async getUserWithTech(id: string): Promise<User> {
         return await this.callDataSource(async () => {
             return await this.usersDataSource.getUserWithTech(id);
-        })
+        });
+    }
+
+    async createUserTech(userId: string, techId: string): Promise<User> {
+        return await this.callDataSource(async () => {
+            return await this.usersDataSource.createUserTech(userId, techId);
+        });
     }
     
     private async callDataSource<T>(callback: Function): Promise<T> {
