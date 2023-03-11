@@ -5,6 +5,7 @@ import { CreateUser, User } from '../../../user/domain/models/user_model';
 import { UserDataSource } from '../interfaces/user_data_source';
 import { INSERT_USER_QUERY, INSERT_USER_TECH, SELECT_USERS_QUERY, SELECT_USER_QUERY, SELECT_USER_WITH_TECH, UPDATE_USER_QUERY } from '../query_scripts/queries';
 import { userFromPG } from '../utils/user_serializer';
+import bcrypt from 'bcrypt'
 
 export class PGUsersDataSource implements UserDataSource {
     private db: Pool;
@@ -35,7 +36,9 @@ export class PGUsersDataSource implements UserDataSource {
     }
 
     async createUser(data: CreateUser): Promise<User> {
-        return await this.callDataBase(INSERT_USER_QUERY, [data.name, data.email, data.password], (result) => userFromPG(result.rows[0]));
+        const hash = await bcrypt.hash(data.password, 10)
+        console.log(hash)
+        return await this.callDataBase(INSERT_USER_QUERY, [data.name, data.email, hash], (result) => userFromPG(result.rows[0]));
     }
 
     async updateUser(data: User): Promise<User> {

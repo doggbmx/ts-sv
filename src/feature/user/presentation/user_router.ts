@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { UserRepositories } from '../domain/repositories/user_repositories';
 import { createUserValidator, getUserValidator, updateUserValidator } from './users_middleware';
 import { validatorHandler } from '../../../core/middlewares/validation_handler';
+import { checkApiKey } from '../../auth/auth.handler';
 
 type UserRequestQuery = { userName?: string };
 
@@ -14,6 +15,14 @@ export default function usersRouter(usersRepository: UserRepositories) {
             const users = await usersRepository.getUser(userName);
             console.log(users);
             res.send(users);
+        } catch (error) {
+            next(error);
+        }
+    });
+    
+    router.get('/auth', checkApiKey , async(req: Request, res: Response, next: NextFunction) => {
+        try {
+            res.send('LETSSSSGOOOOOOO!!!')
         } catch (error) {
             next(error);
         }
@@ -58,7 +67,7 @@ export default function usersRouter(usersRepository: UserRepositories) {
         }
     });
 
-    router.get('/:id/techs', async (req: Request, res: Response, next: NextFunction) => {
+    router.get('/:id/techs', checkApiKey, async (req: Request, res: Response, next: NextFunction) => {
         try {
             const { id } = req.params;
             const user = await usersRepository.getUserWithTech(id);
@@ -67,6 +76,8 @@ export default function usersRouter(usersRepository: UserRepositories) {
             next(error);
         }
     });
+
+    
 
 
     return router;
