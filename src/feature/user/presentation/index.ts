@@ -6,6 +6,6 @@ import UsersRouter from './user_router';
 
 const usersDataSource = PGUsersDataSource.create(pool);
 
-const usersRepository = UserRepositoriesImplementation.create(usersDataSource);
+export const usersRepository = UserRepositoriesImplementation.create(usersDataSource);
 
 export const usersRouter = UsersRouter(usersRepository);

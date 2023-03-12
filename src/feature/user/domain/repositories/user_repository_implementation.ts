@@ -30,6 +30,12 @@ export class UserRepositoriesImplementation implements UserRepositories {
         });
     }
 
+    async getUserByEmail(email: string): Promise<User> {
+        return await this.callDataSource(async () => {
+            return await this.usersDataSource.getUserByEmail(email);
+        });
+    }
+
     async createUser (data: CreateUser): Promise<User> {
         return await this.callDataSource(() => this.usersDataSource.createUser(data));
     }
