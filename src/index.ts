@@ -1,5 +1,6 @@
 import express from 'express';
 import { configureRouting } from './core/routing';
+import './feature/auth/index'
 
 const app = express();
 
