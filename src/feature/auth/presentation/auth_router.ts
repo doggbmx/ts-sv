@@ -10,9 +10,9 @@ export default function AuthRouter() {
         passport.authenticate('local', {session: false}), 
         async (req: Request, res: Response, next: NextFunction) => {
             try {
-                let user= req.user as Partial<User>; 
+                let user= req.user as Partial<User>;
                 delete user.password;
-                res.json(req.user);
+                res.json(user);
             } catch (error) {
                 next(error);
             }
