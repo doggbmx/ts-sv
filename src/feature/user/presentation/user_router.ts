@@ -3,6 +3,7 @@ import { UserRepositories } from '../domain/repositories/user_repositories';
 import { createUserValidator, getUserValidator, updateUserValidator } from './users_middleware';
 import { validatorHandler } from '../../../core/middlewares/validation_handler';
 import { checkApiKey } from '../../auth/auth.handler';
+import passport from 'passport';
 
 type UserRequestQuery = { userName?: string };
 
@@ -20,6 +21,7 @@ export default function usersRouter(usersRepository: UserRepositories) {
         }
     });
     
+    // TEST ROUTE, DELETE LATER
     router.get('/auth', checkApiKey , async(req: Request, res: Response, next: NextFunction) => {
         try {
             res.send('LETSSSSGOOOOOOO!!!')
@@ -67,14 +69,16 @@ export default function usersRouter(usersRepository: UserRepositories) {
         }
     });
 
-    router.get('/:id/techs', checkApiKey, async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { id } = req.params;
-            const user = await usersRepository.getUserWithTech(id);
-            res.send(user);
-        } catch (error) {
-            next(error);
-        }
+    router.get('/:id/techs', 
+        passport.authenticate('jwt', {session: false}), 
+        async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const { id } = req.params;
+                const user = await usersRepository.getUserWithTech(id);
+                res.send(user);
+            } catch (error) {
+                next(error);
+            }
     });
 
     
