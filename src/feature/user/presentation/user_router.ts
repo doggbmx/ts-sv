@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import { UserRepositories } from '../domain/repositories/user_repositories';
 import { createUserValidator, getUserValidator, updateUserValidator } from './users_middleware';
 import { validatorHandler } from '../../../core/middlewares/validation_handler';
-import { checkApiKey } from '../../auth/auth.handler';
+import { checkApiKey, checkIsManu } from '../../auth/auth.handler';
 import passport from 'passport';
 
 type UserRequestQuery = { userName?: string };
@@ -59,14 +59,17 @@ export default function usersRouter(usersRepository: UserRepositories) {
         }
     });
 
-    router.post('/:userId/techs/:techId', async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { userId, techId } = req.params;
-            const newUserTech = await usersRepository.createUserTech(userId, techId);
-            res.status(200).send(newUserTech);
-        } catch (err) {
-            next(err);
-        }
+    router.post('/:userId/techs/:techId',
+        passport.authenticate('jwt', {session: false}),
+        checkIsManu, 
+        async (req: Request, res: Response, next: NextFunction) => {
+            try {
+                const { userId, techId } = req.params;
+                const newUserTech = await usersRepository.createUserTech(userId, techId);
+                res.status(200).send(newUserTech);
+            } catch (err) {
+                next(err);
+            }
     });
 
     router.get('/:id/techs', 
