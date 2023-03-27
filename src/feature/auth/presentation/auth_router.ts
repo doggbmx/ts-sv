@@ -15,6 +15,8 @@ export default function AuthRouter() {
                 let user= req.user as Partial<User>;
                 const payload = {
                     sub: user.userId,
+                    name: user.name,
+                    email: user.email,
                 };
                 const token = jwt.sign(payload, config.jwtSecret as Secret, {
                     expiresIn: '1d',
