@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { User } from "../../user/domain/models/user_model";
-import jwt ,{ Secret } from 'jsonwebtoken'
+import jwt ,{ Jwt, JwtPayload, Secret, VerifyCallback, VerifyErrors } from 'jsonwebtoken'
 
 import passport from 'passport';
 import { config } from '../../../core/config/config';
@@ -19,8 +19,11 @@ export default function AuthRouter() {
                     email: user.email,
                 };
                 const token = jwt.sign(payload, config.jwtSecret as Secret, {
-                    expiresIn: '1d',
+                    expiresIn: '10m',
                 });
+                const refreshToken = jwt.sign(payload, config.refreshToken as Secret, {
+                    expiresIn: '1d',});
+                res.cookie('jwt', refreshToken, { httpOnly: true, secure: true });
                 delete user.password;
                 res.json({
                     user,
@@ -32,5 +35,32 @@ export default function AuthRouter() {
         }
     );
 
+    router.post('/refresh', (req: Request, res: Response, next: NextFunction) => {
+        if (req.cookies.jwt) {
+            const refreshToken = req.cookies.jwt;
+            jwt.verify(refreshToken, config.refreshToken as Secret);
+        } else {
+            res.status(401).send('No token');
+        }
+    });
+
     return router;
 }
+
+// (err: VerifyErrors, decoded: JwtPayload ) => {
+//     if (err) {
+//         res.status(401).send('Invalid token');
+//     } else {
+//         const payload = {
+//             sub: decoded!.sub,
+//             name: decoded!.name,
+//             email: decoded!.email,
+//         };
+//         const token = jwt.sign(payload, config.jwtSecret as Secret, {
+//             expiresIn: '10m',
+//         });
+//         res.json({
+//             token,
+//         });
+//     }
+// }
