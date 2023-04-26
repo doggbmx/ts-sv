@@ -43,6 +43,17 @@ export default function AuthRouter() {
     }
   );
 
+  router.post(
+    "/recovery",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        let { email } = req.body;
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
+
   router.post("/refresh", (req: Request, res: Response, next: NextFunction) => {
     if (req.cookies.jwt) {
       const refreshToken = req.cookies.jwt;
