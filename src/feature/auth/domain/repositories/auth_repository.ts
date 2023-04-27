@@ -5,5 +5,5 @@ import { JwtPayload } from "../jwt_payload";
 export interface AuthRepository {
   getUser(email: string, password: string): Promise<Partial<User>>;
   signToken(user: User): JwtPayload;
-  sendMail(userEmail: string): void;
+  sendMail(userEmail: string): Promise<void>;
 }
