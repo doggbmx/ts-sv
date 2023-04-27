@@ -75,3 +75,4 @@ $RECYCLE.BIN/
 .env
 
 node_modules
+package.json
