@@ -1,21 +1,11 @@
 import { Strategy as LocalStrategy } from "passport-local";
-import { usersRepository } from "../../user/presentation/index";
-import bcrypt from "bcrypt";
+import { authRepository } from "../presentation";
 
 export const localStrategy = new LocalStrategy(
-  { usernameField: "email" },
+  { usernameField: "email", passwordField: "password" },
   async (email, password, done) => {
     try {
-      const user = await usersRepository.getUserByEmail(email);
-      if (!user) {
-        done(new Error(), false);
-      }
-
-      const passMatch = await bcrypt.compare(password, user.password!);
-      if (!passMatch) {
-        done(new Error(), false);
-      }
-
+      const user = await authRepository.getUser(email, password);
       done(null, user);
     } catch (error) {
       done(error, false);
