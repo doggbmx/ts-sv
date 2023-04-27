@@ -1,17 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
 import { User } from "../../user/domain/models/user_model";
-import jwt, {
-  Jwt,
-  JwtPayload,
-  Secret,
-  VerifyCallback,
-  VerifyErrors,
-} from "jsonwebtoken";
-
+import jwt, { Secret } from "jsonwebtoken";
 import passport from "passport";
 import { config } from "../../../core/config/config";
+import { AuthRepository } from "../domain/repositories/auth_repository";
 
-export default function AuthRouter() {
+export default function AuthRouter(authRepository: AuthRepository) {
   const router = express.Router();
 
   router.post(
@@ -19,24 +13,13 @@ export default function AuthRouter() {
     passport.authenticate("local", { session: false }),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        let user = req.user as Partial<User>;
-        const payload = {
-          sub: user.userId,
-          name: user.name,
-          email: user.email,
-        };
-        const token = jwt.sign(payload, config.jwtSecret as Secret, {
-          expiresIn: "10m",
-        });
+        let user = req.user as User;
+        const payload = authRepository.signToken(user);
         const refreshToken = jwt.sign(payload, config.refreshToken as Secret, {
           expiresIn: "1d",
         });
         res.cookie("jwt", refreshToken, { httpOnly: true, secure: true });
-        delete user.password;
-        res.json({
-          user,
-          token,
-        });
+        res.json(authRepository.signToken(user));
       } catch (error) {
         next(error);
       }
