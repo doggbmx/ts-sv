@@ -2,10 +2,11 @@ import { User } from "../../../user/domain/models/user_model";
 import { UserRepositories } from "../../../user/domain/repositories/user_repositories";
 import { usersRepository } from "../../../user/presentation";
 import { AuthRepository } from "./auth_repository";
-import jwt, { Jwt, Secret, VerifyCallback, VerifyErrors } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { config } from "../../../../core/config/config";
 import { JwtPayload } from "../jwt_payload";
+import nodemailer from "nodemailer";
 
 export class AuthRepositoryImplementation implements AuthRepository {
   private userRepository: UserRepositories;
@@ -58,7 +59,31 @@ export class AuthRepositoryImplementation implements AuthRepository {
     };
   }
 
-  sendMail(userEmail: string): void {
-    throw new Error("Method not implemented.");
+  async sendMail(userEmail: string): Promise<void> {
+    const user = await this.userRepository.getUserByEmail(userEmail);
+    if (!user) {
+      console.log("user not found");
+      throw new Error("user not found");
+    }
+    const transporter = nodemailer.createTransport({
+      service: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: config.nodeMailerEmail,
+        pass: config.nodeMailerPassword,
+      },
+    });
+    transporter.verify((err, success) => {
+      if (err) console.error(err);
+      console.log("Your config is correct");
+    });
+    await transporter.sendMail({
+      from: config.nodeMailerEmail,
+      to: user.email,
+      subject: "Password recovery",
+      text: "Hello world?",
+      html: "<b>Hello world?</b>",
+    });
   }
 }
