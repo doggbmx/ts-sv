@@ -66,7 +66,7 @@ export class AuthRepositoryImplementation implements AuthRepository {
       throw new Error("user not found");
     }
     await mailService.sendMail({
-      from: config.nodeMailerEmail,
+      from: config.smtpEmail,
       to: user.email,
       subject: "Password recovery",
       text: "Hello world?",

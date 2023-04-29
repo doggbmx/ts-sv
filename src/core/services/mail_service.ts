@@ -6,7 +6,7 @@ export const mailService = nodemailer.createTransport({
   port: 465,
   secure: true,
   auth: {
-    user: config.nodeMailerEmail,
-    pass: config.nodeMailerPassword,
+    user: config.smtpEmail,
+    pass: config.smtpPassword,
   },
 });

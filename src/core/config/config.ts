@@ -8,6 +8,6 @@ export const config = {
     port: process.env.DB_PORT || 5432,
   },
   refreshToken: process.env.REFRESH_SECRET || "refresh",
-  nodeMailerEmail: process.env.NODEMAILER_EMAIL || "email",
-  nodeMailerPassword: process.env.NODEMAILER_PASS || "password",
+  smtpEmail: process.env.SMTP_EMAIL || "email",
+  smtpPassword: process.env.SMTP_PASS || "password",
 };
