@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import { config } from "../../../../core/config/config";
 import { JwtPayload } from "../jwt_payload";
 import { mailService } from "../../../../core/services/mail_service";
+import { infoMail } from "../models/info_mail_model";
 
 export class AuthRepositoryImplementation implements AuthRepository {
   private userRepository: UserRepositories;
@@ -52,25 +53,38 @@ export class AuthRepositoryImplementation implements AuthRepository {
       name: user.name,
       email: user.email,
     };
-    const token = jwt.sign(payload, config.jwtSecret);
+    const token = jwt.sign(payload, config.jwtSecret, { expiresIn: "15min" });
     return {
       token,
       ...payload,
     };
   }
 
-  async sendMail(userEmail: string): Promise<void> {
+  async sendMail(infoMail: infoMail): Promise<void> {
+    await mailService.sendMail(infoMail);
+  }
+
+  async setRecoveryPassword(userEmail: string): Promise<void> {
     const user = await this.userRepository.getUserByEmail(userEmail);
     if (!user) {
       console.log("user not found");
       throw new Error("user not found");
     }
-    await mailService.sendMail({
+    const token = this.signToken(user);
+    // TEST ROUTE
+    const link = `http://localhost:3000/recovery/?token=${token.token}`;
+    const mail = {
       from: config.smtpEmail,
       to: user.email,
-      subject: "Password recovery",
-      text: "Hello world?",
-      html: "<b>Hello world?</b>",
-    });
+      subject: "Recover your password friend!",
+      html: `<h1>Reset Password</h1>
+      <p>Click this <a href="${link}">link</a> to reset your password</p>`,
+    };
+    try {
+      await this.sendMail(mail);
+    } catch (error) {
+      console.log(error);
+      throw new Error();
+    }
   }
 }
