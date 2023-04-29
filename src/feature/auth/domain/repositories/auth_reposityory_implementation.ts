@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { config } from "../../../../core/config/config";
 import { JwtPayload } from "../jwt_payload";
-import nodemailer from "nodemailer";
+import { mailService } from "../../../../core/services/mail_service";
 
 export class AuthRepositoryImplementation implements AuthRepository {
   private userRepository: UserRepositories;
@@ -65,20 +65,7 @@ export class AuthRepositoryImplementation implements AuthRepository {
       console.log("user not found");
       throw new Error("user not found");
     }
-    const transporter = nodemailer.createTransport({
-      service: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: config.nodeMailerEmail,
-        pass: config.nodeMailerPassword,
-      },
-    });
-    transporter.verify((err, success) => {
-      if (err) console.error(err);
-      console.log("Your config is correct");
-    });
-    await transporter.sendMail({
+    await mailService.sendMail({
       from: config.nodeMailerEmail,
       to: user.email,
       subject: "Password recovery",
