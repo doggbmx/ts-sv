@@ -31,7 +31,7 @@ export default function AuthRouter(authRepository: AuthRepository) {
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         let { email } = req.body;
-        await authRepository.sendMail(email);
+        await authRepository.setRecoveryPassword(email);
         res.status(201).send("Email sent");
       } catch (error) {
         next(error);
