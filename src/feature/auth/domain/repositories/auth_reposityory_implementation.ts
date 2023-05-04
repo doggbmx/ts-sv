@@ -89,4 +89,25 @@ export class AuthRepositoryImplementation implements AuthRepository {
       throw new Error();
     }
   }
+
+  async changePassword(token: string, newPassword: string): Promise<void> {
+    try {
+      const payload = jwt.verify(token, config.jwtSecret) as JwtPayload;
+      console.log("antes de obtener el usuario");
+      const user = await this.userRepository.getUser(payload.sub);
+      console.log("antes de imprimir el recovery token");
+      console.log("user-recoveryToken => ", user);
+      if (user.recoveryToken !== token) {
+        throw new Error("Unauthorized! Invalid recoveryToken");
+      }
+      const hash = await bcrypt.hash(newPassword, 10);
+      await this.userRepository.updateUser(user.userId, {
+        password: hash,
+        recoveryToken: null,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error("Unauthorized");
+    }
+  }
 }
