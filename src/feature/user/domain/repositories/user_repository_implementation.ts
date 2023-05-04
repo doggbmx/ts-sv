@@ -45,6 +45,7 @@ export class UserRepositoriesImplementation implements UserRepositories {
   async updateUser(userId: string, data: UpdateUser): Promise<User> {
     return await this.callDataSource(async () => {
       const selectedUser = await this.usersDataSource.getUser(userId);
+      delete selectedUser.techs;
       const updatedUser = {
         ...selectedUser,
         ...data,
