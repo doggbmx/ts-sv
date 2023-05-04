@@ -3,7 +3,7 @@ export interface User {
   name: string;
   email: string;
   password?: string;
-  recoveryToken?: string;
+  recoveryToken?: string | null;
   techs: any;
 }
 
