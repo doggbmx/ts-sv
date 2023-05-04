@@ -1,6 +1,5 @@
 import { User } from "../../../user/domain/models/user_model";
 import { UserRepositories } from "../../../user/domain/repositories/user_repositories";
-import { usersRepository } from "../../../user/presentation";
 import { AuthRepository } from "./auth_repository";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -71,6 +70,9 @@ export class AuthRepositoryImplementation implements AuthRepository {
       throw new Error("user not found");
     }
     const token = this.signToken(user);
+    await this.userRepository.updateUser(user.userId, {
+      recoveryToken: token.token,
+    });
     // TEST ROUTE
     const link = `http://localhost:3000/recovery/?token=${token.token}`;
     const mail = {
