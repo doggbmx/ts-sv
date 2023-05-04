@@ -21,11 +21,14 @@ export class UserRepositoriesImplementation implements UserRepositories {
     return UserRepositoriesImplementation.instance;
   }
 
-  async getUser(id?: string): Promise<User[]> {
+  async getUser(id?: string): Promise<User> {
     return await this.callDataSource(async () => {
-      if (id) {
-        return await this.usersDataSource.getUser(id);
-      }
+      return await this.usersDataSource.getUser(id!);
+    });
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await this.callDataSource(async () => {
       return await this.usersDataSource.getAllUsers();
     });
   }
