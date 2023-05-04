@@ -67,7 +67,7 @@ export class PGUsersDataSource implements UserDataSource {
   async updateUser(data: User): Promise<User> {
     return await this.callDataBase(
       UPDATE_USER_QUERY,
-      [data.userId, data.name, data.email, data.password, data.techs],
+      [data.userId, data.name, data.email, data.password, data.recoveryToken],
       (result) => userFromPG(result.rows[0])
     );
   }
