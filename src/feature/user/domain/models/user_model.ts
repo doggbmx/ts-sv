@@ -1,10 +1,9 @@
-export type password = string;
-
 export interface User {
   userId: string;
   name: string;
   email: string;
-  password?: password;
+  password?: string;
+  recoveryToken?: string;
   techs: any;
 }
 
