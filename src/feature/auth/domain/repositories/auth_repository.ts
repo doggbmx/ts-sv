@@ -7,4 +7,5 @@ export interface AuthRepository {
   signToken(user: User): JwtPayload;
   sendMail(infoMail: infoMail): Promise<void>;
   setRecoveryPassword(userEmail: string): Promise<void>;
+  changePassword(token: string, newPassword: string): Promise<void>;
 }
