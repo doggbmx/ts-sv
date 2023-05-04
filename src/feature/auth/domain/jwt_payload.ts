@@ -3,4 +3,5 @@ export interface JwtPayload {
   name: string;
   email: string;
   token: string;
+  recoveryToken?: string;
 }
