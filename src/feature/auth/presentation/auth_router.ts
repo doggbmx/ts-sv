@@ -39,6 +39,22 @@ export default function AuthRouter(authRepository: AuthRepository) {
     }
   );
 
+  router.post(
+    "/change-password",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { token, newPassword } = req.body;
+        const response = await authRepository.changePassword(
+          token,
+          newPassword
+        );
+        res.json(response);
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
+
   router.post("/refresh", (req: Request, res: Response, next: NextFunction) => {
     if (req.cookies.jwt) {
       const refreshToken = req.cookies.jwt;
