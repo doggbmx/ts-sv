@@ -39,7 +39,7 @@ export class PGUsersDataSource implements UserDataSource {
   async getUser(id: string): Promise<User> {
     return await this.callDataBase(SELECT_USER_QUERY, [id], (result) => {
       if (result.rowCount === 0) {
-        throw new Error();
+        throw new Error("user not found");
       }
       return userFromPG(result.rows[0]);
     });
