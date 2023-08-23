@@ -3,11 +3,16 @@ import { GenericError } from "../../../error/generic_error";
 import { User, UpdateUser, CreateUser } from "../models/user_model";
 import { UserRepositories } from "./user_repositories";
 import { UserDataSource } from "../../data/interfaces/user_data_source";
+import { BaseRepository } from "../../../../core/package/base_repository";
 // import { CustomErrorHandler } from '../../../error/error_handler'
 
-export class UserRepositoriesImplementation implements UserRepositories {
+export class UserRepositoriesImplementation
+  extends BaseRepository
+  implements UserRepositories
+{
   private usersDataSource: UserDataSource;
   private constructor(dataSource: UserDataSource) {
+    super();
     this.usersDataSource = dataSource;
   }
 
@@ -67,17 +72,5 @@ export class UserRepositoriesImplementation implements UserRepositories {
     return await this.callDataSource(async () => {
       return await this.usersDataSource.createUserTech(userId, techId);
     });
-  }
-
-  private async callDataSource<T>(callback: Function): Promise<T> {
-    try {
-      return await callback();
-    } catch (error) {
-      console.log(error);
-      if (error instanceof CustomError) {
-        throw error;
-      }
-      throw new GenericError("Users Repositories error.");
-    }
   }
 }
