@@ -10,4 +10,5 @@ export const config = {
   refreshToken: process.env.REFRESH_SECRET || "refresh",
   smtpEmail: process.env.SMTP_EMAIL || "email",
   smtpPassword: process.env.SMTP_PASS || "password",
+  smtpHost: process.env.SMTP_HOST || "smtp.gmail.com",
 };
