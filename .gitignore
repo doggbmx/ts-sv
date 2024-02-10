@@ -75,4 +75,7 @@ $RECYCLE.BIN/
 .env
 
 node_modules
-package.json
+./node_modules
+
+package-lock.json
+./package-lock.json
