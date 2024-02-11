@@ -1,5 +1,6 @@
-import { CustomError } from "../../feature/error/custom_error";
-import { GenericError } from "../../feature/error/generic_error";
+import { CustomError } from "../error/custom_error";
+import { GenericError } from "../error/generic_error";
+
 
 export class BaseRepository {
   async callDataSource<T>(callback: () => Promise<T>): Promise<T> {
