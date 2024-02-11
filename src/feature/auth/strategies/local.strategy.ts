@@ -1,5 +1,5 @@
 import { Strategy as LocalStrategy } from "passport-local";
-import { authRepository } from "../presentation";
+import { authRepository } from "../../../core/dependency_injection";
 
 export const localStrategy = new LocalStrategy(
   { usernameField: "email", passwordField: "password" },
