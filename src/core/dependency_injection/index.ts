@@ -8,16 +8,16 @@ import usersRouter from "../../feature/user/presentation/user_router";
 import { AuthRepositoryImplementation } from "../../feature/auth/domain/repositories/auth_reposityory_implementation";
 import AuthRouter from "../../feature/auth/presentation/auth_router";
 
-
 //? USER MODULE
 const usersDataSource = PGUsersDataSource.create(pool);
 
-export const usersRepository = UserRepositoriesImplementation.create(usersDataSource);
+export const usersRepository =
+    UserRepositoriesImplementation.create(usersDataSource);
 
 export const userRouter = usersRouter(usersRepository);
 
 //? AUTH MODULE
 export const authRepository =
-  AuthRepositoryImplementation.create(usersRepository);
+    AuthRepositoryImplementation.create(usersRepository);
 
 export const authRouter = AuthRouter(authRepository);
