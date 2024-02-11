@@ -1,11 +1,10 @@
 import express, { Application } from 'express';
-import { usersRouter } from '../../feature/user/presentation';
-import { authRouter } from '../../feature/auth/presentation';
+import { authRouter, userRouter } from '../dependency_injection';
 
 
 export const configureRouting = (app: Application) => {
     const router = express.Router();
     app.use('/api', router);
     router.use('/auth', authRouter);
-    router.use('/users', usersRouter);
+    router.use('/users', userRouter);
 };
