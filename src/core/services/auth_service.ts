@@ -1,8 +1,7 @@
-import { GenericError } from "../../feature/error/generic_error";
-import { NotFoundError } from "../../feature/error/not_found_error";
-import { usersRepository } from "../../feature/user/presentation";
-
 import bcrypt from "bcrypt";
+import { usersRepository } from "../dependency_injection";
+import { NotFoundError } from "../error/not_found_error";
+import { GenericError } from "../error/generic_error";
 
 export class AuthService {
   async getUser(email: string, password: string) {
