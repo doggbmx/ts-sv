@@ -1,3 +1,6 @@
-import { Pool } from 'pg';
+import { Pool } from "pg";
+import { config } from "../config/config";
 
-export const pool = new Pool({connectionString: 'postgres://postgres:root@localhost:5432'})
+export const pool = new Pool({
+    connectionString: `postgres://${config.db.user}:${config.db.password}@${config.db.host}`,
+});
