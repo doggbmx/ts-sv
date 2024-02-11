@@ -1,5 +1,3 @@
-import { CustomError } from "../../../error/custom_error";
-import { GenericError } from "../../../error/generic_error";
 import { User, UpdateUser, CreateUser } from "../models/user_model";
 import { UserRepositories } from "./user_repositories";
 import { UserDataSource } from "../../data/interfaces/user_data_source";
